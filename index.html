@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SafeDial | Personal Safety App Concept in South Africa</title>
+  <meta name="description" content="Explore SafeDial, a South African personal safety app concept with sample emergency-contact shortcuts and practical safety information. Demo only; no live dispatch.">
+  <style>
+    :root {
+      --red: #b00020;
+      --red-dark: #7f0017;
+      --ink: #1b1b1f;
+      --muted: #55555c;
+      --bg: #ffffff;
+      --bg-alt: #f6f1f1;
+      --radius: 10px;
+      --font-heading: "Amasis MT Pro", Georgia, serif;
+      --font-body: "Amasis MT Pro", Georgia, serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; font-family: var(--font-body); color: var(--ink); background: var(--bg); line-height: 1.6; }
+    img { max-width: 100%; height: auto; display: block; }
+    h1, h2, h3, .logo { font-family: var(--font-heading); line-height: 1.2; }
+    h1 { font-size: clamp(2rem, 5vw, 3.2rem); margin: 0 0 1rem; }
+    h2 { font-size: clamp(1.5rem, 3vw, 2rem); }
+    a { color: var(--red); }
+    .container { width: min(1100px, 92%); margin-inline: auto; }
+    section[id] { scroll-margin-top: 4.5rem; }
+ 
+    .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+    .skip-link { position: absolute; left: 1rem; top: -4rem; background: var(--ink); color: #fff; padding: .6rem 1rem; z-index: 100; }
+    .skip-link:focus { top: 1rem; }
+    :focus-visible { outline: 3px solid #1a73e8; outline-offset: 3px; }
+ 
+    .site-header { background: var(--red); color: #fff; position: sticky; top: 0; z-index: 50; }
+    .header-inner { display: flex; justify-content: space-between; align-items: center; padding-block: .8rem; }
+    .logo { display: flex; align-items: center; gap: .75rem; color: #fff; font-weight: 700; font-size: 1.4rem; text-decoration: none; margin: 0; }
+    .logo img { width: 112px; height: 78px; object-fit: contain; background: #fff; border-radius: 4px; }
+    .primary-nav ul { list-style: none; display: flex; gap: 1.5rem; margin: 0; padding: 0; }
+    .primary-nav a { color: #fff; text-decoration: none; padding: .4rem 0; border-bottom: 2px solid transparent; }
+    .primary-nav a:hover, .primary-nav a[aria-current="true"] { border-bottom-color: #fff; }
+    .menu-toggle { display: none; background: none; border: 2px solid #fff; color: #fff; font-size: 1.4rem; font-family: inherit; padding: .2rem .7rem; border-radius: 6px; cursor: pointer; }
+ 
+    .btn { display: inline-block; padding: .8rem 1.4rem; border-radius: 999px; font-weight: 600; text-decoration: none; border: 2px solid transparent; cursor: pointer; font-size: 1rem; font-family: inherit; }
+    .btn-primary { background: var(--red); color: #fff; }
+    .btn-primary:hover { background: var(--red-dark); }
+    .btn-secondary { border-color: var(--red); color: var(--red); background: #fff; }
+    .btn-light { background: #fff; color: var(--red); }
+    .btn-small { padding: .4rem 1rem; font-size: .9rem; background: var(--bg-alt); color: var(--ink); border-color: var(--ink); }
+    .btn-row { display: flex; gap: 1rem; flex-wrap: wrap; }
+ 
+    .section { padding-block: 4rem; }
+    .section-alt { background: var(--bg-alt); }
+    .lead { font-size: 1.2rem; color: var(--muted); max-width: 60ch; }
+    .hero { padding-block: 4rem; }
+    .hero-grid, .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
+    #about figure { margin-inline: 0; }
+    .services-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(220px, .45fr); gap: 2rem; align-items: stretch; }
+    .services-image { margin: 0; }
+    .services-image img { width: 100%; height: 100%; min-height: 480px; object-fit: cover; }
+    .features-section { position: relative; isolation: isolate; overflow: hidden; }
+    .features-section::before { content: ""; position: absolute; inset: 0; z-index: -1; background: rgba(255, 255, 255, .25); }
+    .features-section .container { position: relative; }
+    .features-background { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; max-width: none; object-fit: cover; }
+    .cta-banner { background: var(--red); color: #fff; text-align: center; padding-block: 3rem; }
+ 
+    .card-grid { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; }
+    .card { background: #fff; border: 1px solid #ddd; border-radius: var(--radius); padding: 1.5rem; }
+    .card h3 { margin-top: 0; }
+    .code { font-family: var(--font-body); font-size: 2rem; font-weight: 700; color: var(--red); margin: .5rem 0; }
+    .service-heading { display: flex; flex-direction: column; align-items: flex-start; gap: .35rem; }
+    .service-heading h3, .service-heading .code { margin: 0; }
+    .field { margin-bottom: 1.2rem; }
+    label { display: block; font-weight: 600; margin-bottom: .3rem; }
+    input, select, textarea { width: 100%; padding: .7rem; border: 2px solid #8a8a90; border-radius: 6px; font: inherit; }
+    input.invalid, select.invalid, textarea.invalid { border-color: var(--red); }
+    .error { color: var(--red); font-size: .9rem; min-height: 1.2em; margin: .3rem 0 0; }
+    .success { color: #14693a; font-weight: 600; }
+ 
+    .site-footer { background: var(--ink); color: #fff; padding-block: 2.5rem 1.5rem; }
+    .site-footer a { color: #fff; }
+    .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2rem; }
+    .site-footer ul { list-style: none; padding: 0; }
+    .disclaimer { font-size: .85rem; color: #c9c9ce; border-top: 1px solid #444; padding-top: 1rem; }
+    .social-strategy { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-block: 1.5rem 2.5rem; }
+    .social-strategy article { border-top: 3px solid var(--red); padding-top: .75rem; }
+    .calendar-wrap { overflow-x: auto; margin-block: 1rem 2.5rem; }
+    .content-calendar { width: 100%; min-width: 760px; border-collapse: collapse; background: #fff; }
+    .content-calendar th, .content-calendar td { text-align: left; padding: .8rem; border: 1px solid #ddd; vertical-align: top; }
+    .content-calendar th { background: var(--red); color: #fff; }
+    .social-post-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; list-style: none; margin: 1.25rem 0 0; padding: 0; }
+    .social-post { min-width: 0; border: 1px solid #ddd; background: #fff; }
+    .post-art { display: flex; position: relative; flex-direction: column; justify-content: flex-end; aspect-ratio: 4 / 5; overflow: hidden; background: var(--red); color: #fff; text-decoration: none; }
+    .post-art img { position: absolute; inset: 0 0 auto; width: 100%; height: 64%; object-fit: cover; }
+    .post-art-copy { position: relative; min-height: 36%; display: flex; flex-direction: column; justify-content: center; padding: 1rem; background: var(--red); }
+    .post-art-copy p { margin: .2rem 0; }
+    .post-art-copy h4 { margin: .25rem 0; font-size: 1.35rem; line-height: 1.15; }
+    .post-brand { font-size: .75rem; font-weight: 700; }
+    .post-details { padding: 1rem; }
+    .post-details p { margin-top: 0; }
+ 
+    @media (max-width: 800px) {
+      .hero-grid, .two-col { grid-template-columns: 1fr; }
+      .services-layout { grid-template-columns: 1fr; }
+      .services-image img { height: auto; min-height: 0; object-fit: contain; }
+      .menu-toggle { display: block; }
+      .primary-nav { display: none; position: absolute; top: 100%; left: 0; right: 0; background: var(--red-dark); padding: 1rem 4%; }
+      .primary-nav.open { display: block; }
+      .primary-nav ul { flex-direction: column; gap: .5rem; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  </style>
+</head>
+ 
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+ 
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="logo" href="#home" aria-label="Home"><img src="logo.jpg" alt="SafeDial logo" width="1232" height="862"><span>SafeDial</span></a>
+      <button class="menu-toggle" aria-expanded="false" aria-controls="primary-nav">
+        <span class="visually-hidden">Toggle menu</span>
+        <span aria-hidden="true">&#9776;</span>
+      </button>
+      <nav id="primary-nav" class="primary-nav" aria-label="Main navigation">
+        <ul>
+          <li><a href="#home" aria-current="page">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li><a href="#marketing-plan">Marketing Plan</a></li>
+          <li><a href="#social-campaign">Social</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+ 
+  <main id="main">
+ 
+    <section id="home" class="hero" aria-labelledby="hero-heading">
+      <div class="container hero-grid">
+        <div>
+          <h1 id="hero-heading">When every second counts, help is one dial away</h1>
+          <p class="lead">Explore a South African personal safety app concept with sample emergency-contact shortcuts and practical safety information.</p>
+          <p><strong>Demo only:</strong> SafeDial does not contact emergency services.</p>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="#services">Explore sample codes</a>
+            <a class="btn btn-secondary" href="#contact">Contact SafeDial</a>
+          </div>
+        </div>
+        <figure>
+          <img src="woman-holding-cellphone.jpg" alt="A woman holds a phone displaying the SafeDial Police and Ambulance emergency codes" width="1232" height="862">
+        </figure>
+      </div>
+    </section>
+ 
+    <section class="section section-alt" aria-labelledby="why-heading">
+      <div class="container">
+        <h2 id="why-heading">What makes SafeDial different?</h2>
+        <div class="card-grid">
+          <article class="card"><h3>1. Quick to reach</h3><p>Short codes like *1# and *2# keep help a few taps away.</p></article>
+          <article class="card"><h3>2. Easy to remember</h3><p>Simple, memorable codes make it easy to access help when you need it most.</p></article>
+          <article class="card"><h3>3. Built for stressful moments</h3><p>SafeDial is designed to work under pressure, ensuring you can get the help you need when it matters most.</p></article>
+        </div>
+      </div>
+    </section>
+ 
+    <section id="about" class="section" aria-labelledby="about-heading">
+      <div class="container two-col">
+        <div>
+          <h2 id="about-heading">About SafeDial</h2>
+          <p class="lead">SafeDial is a simple yet powerful solution that provides instant access to emergency services when you need them most.</p>
+          <h3>OUR MISSION</h3>
+          <p>Our mission is to make asking for help faster and simpler, so that anyone can reach police or an ambulance in a few taps, even when they are scared or in a hurry.</p>
+          <h3>OUR VISION</h3>
+          <p>Our vision is a South Africa where no one hesitates to ask for help because they don't know how.</p>
+        </div>
+        <figure>
+          <img src="feature.jpg" alt="SafeDial community safety features including police, instant SOS, community police forum and private security" width="1365" height="768">
+        </figure>
+      </div>
+    </section>
+ 
+    <section class="section section-alt" aria-labelledby="values-heading">
+      <div class="container">
+        <h2 id="values-heading">OUR VALUES</h2>
+        <ul class="card-grid">
+          <li class="card"><h3>1. Speed</h3><p>Help should be a few taps away, not buried in menus.</p></li>
+          <li class="card"><h3>2. Trust</h3><p>We are honest about what the app does and how it works.</p></li>
+          <li class="card"><h3>3. Care</h3><p>Every design choice puts the person in distress first.</p></li>
+        </ul>
+      </div>
+    </section>
+ 
+    <section id="services" class="section" aria-labelledby="services-heading">
+      <div class="container">
+        <div class="services-layout">
+          <div>
+            <h2 id="services-heading">OUR PRODUCTS &amp; SERVICES</h2>
+            <p class="lead">SafeDial gives you five quick-dial codes for police, ambulance, fire, family and SOS, so the right help is always one code away.</p>
+            <ul class="card-grid">
+              <li class="card"><div class="service-heading"><h3>Police</h3><p class="code">*1#</p></div><p>Immediate connection to local law enforcement.</p>
+                <button class="btn btn-small copy-btn" data-code="*1#">Copy code</button></li>
+              <li class="card"><div class="service-heading"><h3>Ambulance</h3><p class="code">*2#</p></div><p>Medical emergency dispatch and paramedic support.</p>
+                <button class="btn btn-small copy-btn" data-code="*2#">Copy code</button></li>
+              <li class="card"><div class="service-heading"><h3>Fire Department</h3><p class="code">*3#</p></div><p>Fire and rescue services dispatched instantly.</p>
+                <button class="btn btn-small copy-btn" data-code="*3#">Copy code</button></li>
+              <li class="card"><div class="service-heading"><h3>Family Contact</h3><p class="code">*4#</p></div><p>One-tap call to your registered emergency family member.</p>
+                <button class="btn btn-small copy-btn" data-code="*4#">Copy code</button></li>
+              <li class="card"><div class="service-heading"><h3>Emergency SOS</h3><p class="code">*5#</p></div><p>Broadcasts your location and alert to all contacts.</p>
+                <button class="btn btn-small copy-btn" data-code="*5#">Copy code</button></li>
+            </ul>
+          </div>
+          <figure class="services-image">
+            <img src="cellphone.jpg" alt="SafeDial phone showing Police, Ambulance, Fire, Family and SOS options" width="768" height="1536">
+          </figure>
+        </div>
+        <p id="copy-status" class="visually-hidden" role="status" aria-live="polite"></p>
+      </div>
+    </section>
+ 
+    <section class="section features-section" aria-labelledby="features-heading">
+      <img class="features-background" src="police-and-ambulance.jpg.jpg" alt="" width="1408" height="768">
+      <div class="container">
+        <h2 id="features-heading">FEATURES</h2>
+        <div class="card-grid">
+          <article class="card"><h3>One-tap dial</h3><p>Tap a code once to start a call to the help you need.</p></article>
+          <article class="card"><h3>Location sharing</h3><p>Share your location with emergency services in seconds.</p></article>
+          <article class="card"><h3>Family Contact</h3><p>One-tap call to your registered emergency family member.</p></article>
+          <article class="card"><h3>Emergency SOS</h3><p>Broadcasts your location and alert to all contacts.</p></article>
+        </div>
+      </div>
+    </section>
+ 
+    <section class="section section-alt" aria-labelledby="faq-heading">
+      <div class="container">
+        <h2 id="faq-heading">Frequently asked questions</h2>
+        <details><summary>What is SafeDial?</summary><p>SafeDial is a fictional emergency app made for a training project. It shows how short codes could give people quick access to help.</p></details>
+        <details><summary>What do the emergency codes do?</summary><p>Each code, such as *1# for police, is an example of a one-step shortcut to a type of help. They are placeholders and do not connect to real services.</p></details>
+      </div>
+    </section>
+ 
+    <section id="marketing-plan" class="section section-alt" aria-labelledby="marketing-heading">
+      <div class="container">
+        <h2 id="marketing-heading">Marketing Plan</h2>
+        <div class="card-grid">
+          <article class="card">
+            <h3>Audience and message</h3>
+            <p>Reach South African adults and caregivers researching personal safety planning. Present SafeDial as a concept demo with sample shortcuts, not a live emergency service.</p>
+          </article>
+          <article class="card">
+            <h3>Search keyword research (South Africa)</h3>
+            <ul>
+              <li><strong>Primary:</strong> personal safety app South Africa</li>
+              <li><strong>High intent:</strong> emergency SOS app South Africa; panic button app South Africa</li>
+              <li><strong>Informational:</strong> South Africa emergency numbers; emergency numbers app South Africa</li>
+            </ul>
+            <p>Manual search-results scan, 13 October 2026: these phrases reflect wording used by South African safety-app and emergency-number results. This is qualitative research, not search-volume data; check volume and competition in Google Keyword Planner before launch. SafeDial is a concept demo, not a live emergency-response service.</p>
+            <p>Example results: <a href="https://helpmesa.co.za/">HelpMe personal safety app</a>, <a href="https://sossa.co.za/">SOSSA emergency SOS app</a>, <a href="https://safercity.co.za/">SaferCity panic button app</a>, and <a href="https://findmeapp.co.za/emergency-numbers.html">findME South Africa emergency numbers</a>.</p>
+          </article>
+          <article class="card">
+            <h3>SMART campaign objective</h3>
+            <p>During an 8-week pilot, attract 300 relevant visits from South African search users and at least 30 clicks on a contact call to action. Measure with campaign analytics; configure privacy-respecting analytics and conversion events before launch.</p>
+          </article>
+        </div>
+        <h3>Proposed search advertisement</h3>
+        <article class="card">
+          <p><strong>Display URL:</strong> safedial.example (replace with the live site domain)</p>
+          <p><strong>Headline 1:</strong> Explore the SafeDial Concept</p>
+          <p><strong>Headline 2:</strong> Personal Safety App Demo</p>
+          <p><strong>Headline 3:</strong> Emergency Contacts Made Simple</p>
+          <p><strong>Description 1:</strong> Explore sample safety codes and emergency contacts. Demo only; no live dispatch.</p>
+          <p><strong>Description 2:</strong> See a South African safety-app concept. For emergencies, call official services.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="social-campaign" class="section" aria-labelledby="social-heading">
+      <div class="container">
+        <h2 id="social-heading">Social Media Campaign</h2>
+        <p class="lead">A one-week awareness pilot for the SafeDial concept, with every post leading to a relevant page section.</p>
+
+        <div class="social-strategy">
+          <article>
+            <h3>Audience and channels</h3>
+            <p>South African adults and caregivers interested in personal safety planning. Use Instagram and Facebook for visual explainers, with WhatsApp status for short community reminders.</p>
+          </article>
+          <article>
+            <h3>Content and cadence</h3>
+            <p>Publish three feed posts per week, supported by brief Stories and one community reminder. Rotate demo explainers, trusted-contact planning, and official emergency information.</p>
+          </article>
+          <article>
+            <h3>Voice and safeguards</h3>
+            <p>Use calm, clear language. Label SafeDial as a fictional concept; never imply its sample codes connect to responders or replace official emergency numbers.</p>
+          </article>
+          <article>
+            <h3>Success measures</h3>
+            <p>Review reach, saves, shares, link clicks, and contact-page visits at week end. Add campaign tracking and consent controls before any live promotion.</p>
+          </article>
+        </div>
+
+        <h3>One-week content calendar</h3>
+        <div class="calendar-wrap">
+          <table class="content-calendar">
+            <thead><tr><th>Day</th><th>Platform and format</th><th>Content</th><th>Website destination</th></tr></thead>
+            <tbody>
+              <tr><td>Monday</td><td>Instagram and Facebook feed</td><td>Post 1: sample shortcuts, clearly marked as a demo.</td><td><a href="#services">Explore Services</a></td></tr>
+              <tr><td>Tuesday</td><td>Instagram Story poll</td><td>Ask what trusted contact people would include in a safety plan.</td><td><a href="#contact">Contact SafeDial</a></td></tr>
+              <tr><td>Wednesday</td><td>Instagram and Facebook feed</td><td>Post 2: introduce the community safety-net concept.</td><td><a href="#about">About SafeDial</a></td></tr>
+              <tr><td>Thursday</td><td>Instagram Story Q&amp;A</td><td>Clarify that the demo is fictional and does not dispatch help.</td><td><a href="#faq-heading">Read the FAQ</a></td></tr>
+              <tr><td>Friday</td><td>Facebook and Instagram feed</td><td>Post 3: share official South African emergency numbers.</td><td><a href="#emergency-information">Emergency information</a></td></tr>
+              <tr><td>Saturday</td><td>WhatsApp Status</td><td>Share a short reminder to keep trusted contacts accessible.</td><td><a href="#about">See the concept</a></td></tr>
+              <tr><td>Sunday</td><td>Community replies and review</td><td>Answer questions, moderate replies, and review weekly reach and link clicks.</td><td><a href="#social-campaign">Campaign overview</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Designed social posts</h3>
+        <ul class="social-post-grid">
+          <li class="social-post">
+            <article>
+              <a class="post-art" href="#services" aria-label="View SafeDial sample services">
+                <img src="cellphone.jpg" alt="SafeDial concept phone screen with sample safety options">
+                <div class="post-art-copy"><p class="post-brand">SAFEDIAL | CONCEPT DEMO</p><h4>Know your safety shortcuts.</h4><p>Sample codes only. No live calls.</p></div>
+              </a>
+              <div class="post-details">
+                <p><strong>Caption:</strong> Simple shortcuts can make a safety plan easier to remember. Explore the SafeDial concept; these sample codes do not connect to real services.</p>
+                <p>#SafeDialDemo #PersonalSafety #SouthAfrica</p>
+                <a class="btn btn-small" href="#services">Explore sample services</a>
+              </div>
+            </article>
+          </li>
+          <li class="social-post">
+            <article>
+              <a class="post-art" href="#about" aria-label="Learn about the SafeDial concept">
+                <img src="feature.jpg" alt="SafeDial concept infographic showing a family and community safety network">
+                <div class="post-art-copy"><p class="post-brand">SAFEDIAL | CONCEPT DEMO</p><h4>Safety planning starts with people you trust.</h4><p>A concept for connection and care.</p></div>
+              </a>
+              <div class="post-details">
+                <p><strong>Caption:</strong> A personal safety plan can include people you trust. See the idea behind SafeDial, a training concept rather than a live response service.</p>
+                <p>#SafetyPlanning #CommunityCare #SafeDialDemo</p>
+                <a class="btn btn-small" href="#about">About SafeDial</a>
+              </div>
+            </article>
+          </li>
+          <li class="social-post">
+            <article>
+              <a class="post-art" href="#emergency-information" aria-label="View official emergency numbers">
+                <img src="police-and-ambulance.jpg.jpg" alt="Police vehicle and ambulance representing emergency services">
+                <div class="post-art-copy"><p class="post-brand">SAFEDIAL | SAFETY REMINDER</p><h4>Save official emergency numbers.</h4><p>112 | 10111 | 10177</p></div>
+              </a>
+              <div class="post-details">
+                <p><strong>Caption:</strong> Save the official numbers for emergencies in South Africa. SafeDial is only a concept demo and does not contact emergency services.</p>
+                <p>#EmergencyNumbers #SouthAfrica #SafetyReminder</p>
+                <a class="btn btn-small" href="#emergency-information">View emergency information</a>
+              </div>
+            </article>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="cta-banner" aria-labelledby="cta-heading">
+      <div class="container">
+        <h2 id="cta-heading">Help is one dial away. Get started today.</h2>
+        <a class="btn btn-light" href="#contact">Get in touch</a>
+      </div>
+    </section>
+ 
+    <section id="contact" class="section" aria-labelledby="contact-heading">
+      <div class="container two-col">
+        <div>
+          <h2 id="contact-heading">CONTACT US</h2>
+          <p class="lead">Send us a question about the SafeDial concept. We aim to reply within two working days.</p>
+          <p class="notice">Submitting this form opens an email draft. Your message is not sent until you send the draft in your email app.</p>
+ 
+          <form id="contact-form" novalidate>
+            <div class="field">
+              <label for="name">Full name</label>
+              <input type="text" id="name" name="name" autocomplete="name" required aria-describedby="name-error">
+              <p class="error" id="name-error" role="alert"></p>
+            </div>
+            <div class="field">
+              <label for="email">Email address</label>
+              <input type="email" id="email" name="email" autocomplete="email" required aria-describedby="email-error">
+              <p class="error" id="email-error" role="alert"></p>
+            </div>
+            <div class="field">
+              <label for="topic">Topic</label>
+              <select id="topic" name="topic" required aria-describedby="topic-error">
+                <option value="">Choose a topic</option>
+                <option>General question</option>
+                <option>Report a problem with a code</option>
+                <option>Partnership or media enquiry</option>
+              </select>
+              <p class="error" id="topic-error" role="alert"></p>
+            </div>
+            <div class="field">
+              <label for="message">Message (at least 10 characters)</label>
+              <textarea id="message" name="message" rows="5" required aria-describedby="message-error"></textarea>
+              <p class="error" id="message-error" role="alert"></p>
+            </div>
+            <button type="submit" class="btn btn-primary">Prepare email</button>
+            <p id="form-status" class="success" role="status" aria-live="polite"></p>
+          </form>
+        </div>
+ 
+        <aside id="emergency-information" aria-labelledby="details-heading">
+          <h3 id="details-heading">CONTACT DETAILS</h3>
+          <ul>
+            <li>Email: <a href="mailto:safedial25@gmail.com">safedial25@gmail.com</a></li>
+            <li>Phone: <a href="tel:+27861723334">+27861723334</a></li>
+            <li>Address: Serving all of South Africa, online and by phone</li>
+          </ul>
+          <p><strong>Not for emergencies.</strong> In a real emergency call 112, 10111 or 10177.</p>
+        </aside>
+      </div>
+    </section>
+ 
+  </main>
+ 
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <p class="logo">SafeDial</p>
+        <p>Safety in your pocket, help one dial away.</p>
+      </div>
+      <nav aria-label="Footer navigation">
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li><a href="#marketing-plan">Marketing Plan</a></li>
+          <li><a href="#social-campaign">Social</a></li>
+        </ul>
+      </nav>
+      <div>
+        <p><strong>In a real emergency</strong>, call <strong>112</strong> from a mobile, <strong>10111</strong> (police) or <strong>10177</strong> (ambulance).</p>
+      </div>
+    </div>
+    <div class="container">
+      <p class="disclaimer">This is a fictional app created for a training project. The codes, statistics and testimonials shown are placeholder content only. &copy; 2026 SafeDial.</p>
+    </div>
+  </footer>
+ 
+  <script>
+    const menuToggle = document.querySelector('.menu-toggle');
+    const primaryNav = document.getElementById('primary-nav');
+
+    if (menuToggle && primaryNav) {
+      menuToggle.addEventListener('click', function () {
+        const isOpen = menuToggle.getAttribute('aria-expanded') === 'true';
+        menuToggle.setAttribute('aria-expanded', String(!isOpen));
+        primaryNav.classList.toggle('open', !isOpen);
+      });
+
+      primaryNav.querySelectorAll('a').forEach(function (link) {
+        link.addEventListener('click', function () {
+          menuToggle.setAttribute('aria-expanded', 'false');
+          primaryNav.classList.remove('open');
+        });
+      });
+    }
+
+    const contactForm = document.getElementById('contact-form');
+
+    if (contactForm) {
+      const formFields = [
+        { input: document.getElementById('name'), error: document.getElementById('name-error') },
+        { input: document.getElementById('email'), error: document.getElementById('email-error') },
+        { input: document.getElementById('topic'), error: document.getElementById('topic-error') },
+        { input: document.getElementById('message'), error: document.getElementById('message-error') }
+      ];
+      const formStatus = document.getElementById('form-status');
+
+      contactForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+        formStatus.textContent = '';
+        let firstInvalidField = null;
+
+        formFields.forEach(function (field) {
+          const value = field.input.value.trim();
+          let errorMessage = '';
+
+          if (!value) {
+            errorMessage = 'This field is required.';
+          } else if (field.input.type === 'email' && !field.input.validity.valid) {
+            errorMessage = 'Enter a valid email address.';
+          } else if (field.input.id === 'message' && value.length < 10) {
+            errorMessage = 'Please enter at least 10 characters.';
+          }
+
+          field.error.textContent = errorMessage;
+          field.input.classList.toggle('invalid', Boolean(errorMessage));
+
+          if (errorMessage && !firstInvalidField) {
+            firstInvalidField = field.input;
+          }
+        });
+
+        if (firstInvalidField) {
+          formStatus.textContent = 'Please correct the highlighted fields.';
+          firstInvalidField.focus();
+          return;
+        }
+
+        const formData = new FormData(contactForm);
+        const subject = 'SafeDial enquiry: ' + formData.get('topic');
+        const message = [
+          'Name: ' + formData.get('name'),
+          'Email: ' + formData.get('email'),
+          '',
+          formData.get('message')
+        ].join('\n');
+        const emailLink = 'mailto:safedial25@gmail.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(message);
+
+        formStatus.textContent = 'Your email app should open with a draft. Send it there to contact SafeDial.';
+        window.location.href = emailLink;
+      });
+
+      formFields.forEach(function (field) {
+        field.input.addEventListener('input', function () {
+          field.error.textContent = '';
+          field.input.classList.remove('invalid');
+        });
+      });
+    }
+  </script>
+</body>
+</html>
